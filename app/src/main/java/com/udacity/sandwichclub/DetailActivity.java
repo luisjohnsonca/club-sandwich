@@ -68,12 +68,17 @@ public class DetailActivity extends AppCompatActivity {
 
     private void populateUI(Sandwich sandwich) {
 
+        // TODO - Replace findViewById methods for ButterKnife BindView methods.
+        // TODO -  Show a message on TextViews when there is no data to show.
         //Populate Origin Text View
-        mOriginTextView = (TextView) findViewById(R.id.origin_tv);
+        mOriginTextView = findViewById(R.id.origin_tv);
         mOriginTextView.append(sandwich.getPlaceOfOrigin() +".");
 
         //Populate Also Know As Text View
-        mAlsoKnowAsTextView = (TextView) findViewById(R.id.also_known_tv);
+        mAlsoKnowAsTextView = findViewById(R.id.also_known_tv);
+
+        // TODO -  Use Android TextUtils.join() method to get Strings.
+
        List<String> list  = sandwich.getAlsoKnownAs();
        for(int i = 0; i < list.size(); i++ )
        {
@@ -81,14 +86,14 @@ public class DetailActivity extends AppCompatActivity {
        }
 
         //Populate Ingredients Text View
-        mIngredientsTextView = (TextView) findViewById(R.id.ingredients_tv);
+        mIngredientsTextView = findViewById(R.id.ingredients_tv);
         for(String value:sandwich.getIngredients())
         {
             mIngredientsTextView.append(" - " + value + ".\n");
         }
 
         //Populate Description Text View
-        mDescriptionTextView = (TextView) findViewById(R.id.description_tv);
+        mDescriptionTextView = findViewById(R.id.description_tv);
         mDescriptionTextView.append(sandwich.getDescription());
 
 
