@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,22 +14,28 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
+    // COMPLETED - Replace findViewById methods for ButterKnife BindView methods.
     //Declare Widgets
-    TextView mOriginTextView;
-    TextView mAlsoKnowAsTextView;
-    TextView mIngredientsTextView;
-    TextView mDescriptionTextView;
-
+    @BindView(R.id.origin_tv) TextView mOriginTextView;
+    @BindView(R.id.also_known_tv)TextView mAlsoKnowAsTextView;
+    @BindView(R.id.ingredients_tv)TextView mIngredientsTextView;
+    @BindView(R.id.description_tv)TextView mDescriptionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        //ButterKnife Binding.
+        ButterKnife.bind(this);
 
         ImageView ingredientsIv = findViewById(R.id.image_iv);
 
@@ -68,34 +75,38 @@ public class DetailActivity extends AppCompatActivity {
 
     private void populateUI(Sandwich sandwich) {
 
-        // TODO - Replace findViewById methods for ButterKnife BindView methods.
-        // TODO -  Show a message on TextViews when there is no data to show.
+
+        // COMPLETED -  Show a message on TextViews when there is no data to show.
+        // COMPLETED -  Use Android TextUtils.join() method to join Strings.
+
         //Populate Origin Text View
-        mOriginTextView = findViewById(R.id.origin_tv);
-        mOriginTextView.append(sandwich.getPlaceOfOrigin() +".");
+        if(!TextUtils.isEmpty(sandwich.getPlaceOfOrigin())){
+            mOriginTextView.append(sandwich.getPlaceOfOrigin() +".");
+        } else {
+            mOriginTextView.append(getString(R.string.no_data_available_msg));
+        }
 
         //Populate Also Know As Text View
-        mAlsoKnowAsTextView = findViewById(R.id.also_known_tv);
-
-        // TODO -  Use Android TextUtils.join() method to get Strings.
-
-       List<String> list  = sandwich.getAlsoKnownAs();
-       for(int i = 0; i < list.size(); i++ )
-       {
-           mAlsoKnowAsTextView.append(i < list.size() - 1 ? list.get(i) + " ," : list.get(i) + ".");
-       }
+        if(!sandwich.getAlsoKnownAs().isEmpty()) {
+            mAlsoKnowAsTextView.append(TextUtils.join(" ,",sandwich.getAlsoKnownAs()));
+            mAlsoKnowAsTextView.append(".");
+        } else {
+            mAlsoKnowAsTextView.append(getString(R.string.no_data_available_msg));
+        }
 
         //Populate Ingredients Text View
-        mIngredientsTextView = findViewById(R.id.ingredients_tv);
-        for(String value:sandwich.getIngredients())
-        {
-            mIngredientsTextView.append(" - " + value + ".\n");
+        if(!sandwich.getIngredients().isEmpty()){
+            mIngredientsTextView.append(TextUtils.join(" ,", sandwich.getIngredients()));
+            mIngredientsTextView.append(".");
+        } else {
+            mIngredientsTextView.append(getString(R.string.no_data_available_msg));
         }
 
         //Populate Description Text View
-        mDescriptionTextView = findViewById(R.id.description_tv);
-        mDescriptionTextView.append(sandwich.getDescription());
-
-
+        if(!TextUtils.isEmpty(sandwich.getDescription())) {
+            mDescriptionTextView.append(sandwich.getDescription());
+        } else {
+            mDescriptionTextView.append(getString(R.string.no_data_available_msg));
+        }
     }
 }
